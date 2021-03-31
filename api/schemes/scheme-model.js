@@ -94,10 +94,12 @@ function findById(scheme_id) { // EXERCISE B
   */
 
       return db.select('sc.scheme_name', 'st.*')
+      // .count('st.steps_id as steps')
       .from('schemes as sc')
       .leftJoin('steps as st', 'sc.scheme_id', 'st.scheme_id')
-      .where(`sc.scheme_id = ${scheme_id}`)
-      .orderBy('st.step_number', 'asc')
+      .where('sc.scheme_id', "=", `${scheme_id}`)
+      .orderBy('st.step_number')
+      // .groupBy('st.step_id')
 
 }
 

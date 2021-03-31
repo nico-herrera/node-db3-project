@@ -11,7 +11,7 @@ const ExpressError = require('../ExpressError');
 */
 const checkSchemeId = async (req, res, next) => {
   try {
-    const scheme = await Schemes.findById(req.params.id).first()
+    const scheme = await Schemes.findById(req.params.id)
     if (scheme) {
       next();
     } else {
@@ -34,11 +34,10 @@ const validateScheme = (req, res, next) => {
   try {
     const body = req.body;
     if (!body.scheme_name) {
-      next(new ExpressError('invalid scheme_name', 400))
-    } else if (body.scheme_name.length === 0) {
-      next(new ExpressError('invalid scheme_name', 400))
+      // next(new ExpressError('invalid scheme_name', 400))
+      res.status(400).json({message: "invalid scheme_name"})
     } else if (typeof body.scheme_name !== 'string') {
-      next(new ExpressError('invalid scheme_name', 400))
+      res.status(400).json({message: "invalid scheme_name"})
     } else {
       next()
     }
@@ -60,15 +59,17 @@ const validateStep = (req, res, next) => {
   try {
     const body = req.body;
     if (!body.instructions) {
-      next(new ExpressError('invalid step', 400))
-    } else if (body.instructions.length === 0) {
-      next(new ExpressError('invalid step', 400))
+      res.status(400).json({message: "invalid step"})
+      // next(new ExpressError('invalid step', 400))
     } else if (typeof body.instructions !== 'string') {
-      next(new ExpressError('invalid step', 400))
+      res.status(400).json({message: "invalid step"})
+      // next(new ExpressError('invalid step', 400))
     } else if (typeof body.step_number !== "number") {
-      next(new ExpressError('invalid step', 400))
+      res.status(400).json({message: "invalid step"})
+      // next(new ExpressError('invalid step', 400))
     } else if (body.step_number < 1) {
-      next(new ExpressError('invalid step', 400))
+      res.status(400).json({message: "invalid step"})
+      // next(new ExpressError('invalid step', 400))
     } else {
       next()
     }
