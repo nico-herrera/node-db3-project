@@ -26,7 +26,7 @@ function find() { // EXERCISE A
 
 }
 
-function findById(scheme_id) { // EXERCISE B
+async function findById(scheme_id) { // EXERCISE B
   /*
     1B- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`:
 
@@ -93,37 +93,6 @@ function findById(scheme_id) { // EXERCISE B
       }
   */
 
-      return db.select('sc.scheme_name', 'st.*')
-      // .count('st.steps_id as steps')
-      .from('schemes as sc')
-      .leftJoin('steps as st', 'sc.scheme_id', 'st.scheme_id')
-      .where('sc.scheme_id', "=", `${scheme_id}`)
-      .orderBy('st.step_number')
-      // .groupBy('st.step_id')
-
-}
-
-async function findSteps(scheme_id) { // EXERCISE C
-  /*
-    1C- Build a query in Knex that returns the following data.
-    The steps should be sorted by step_number, and the array
-    should be empty if there are no steps for the scheme:
-
-      [
-        {
-          "step_id": 5,
-          "step_number": 1,
-          "instructions": "collect all the sheep in Scotland",
-          "scheme_name": "Get Rich Quick"
-        },
-        {
-          "step_id": 4,
-          "step_number": 2,
-          "instructions": "profit",
-          "scheme_name": "Get Rich Quick"
-        }
-      ]
-  */
       const scheme = await db("schemes as sc")
       .where({ "sc.scheme_id": scheme_id })
       .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
@@ -151,6 +120,36 @@ async function findSteps(scheme_id) { // EXERCISE C
           : [],
     };
     return newObj;
+
+}
+
+function findSteps(scheme_id) { // EXERCISE C
+  /*
+    1C- Build a query in Knex that returns the following data.
+    The steps should be sorted by step_number, and the array
+    should be empty if there are no steps for the scheme:
+
+      [
+        {
+          "step_id": 5,
+          "step_number": 1,
+          "instructions": "collect all the sheep in Scotland",
+          "scheme_name": "Get Rich Quick"
+        },
+        {
+          "step_id": 4,
+          "step_number": 2,
+          "instructions": "profit",
+          "scheme_name": "Get Rich Quick"
+        }
+      ]
+  */
+
+      return db.select('step_id', 'step_number', 'instructions', 'sc.scheme_name')
+      .from('schemes as sc')
+      .leftJoin('steps as st', 'st.scheme_id', 'sc.scheme_id')
+      .where( {"sc.scheme_id": scheme_id })
+      .orderBy('step_number')
 
 }
 

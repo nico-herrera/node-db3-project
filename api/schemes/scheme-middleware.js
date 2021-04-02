@@ -11,8 +11,9 @@ const ExpressError = require('../ExpressError');
 */
 const checkSchemeId = async (req, res, next) => {
   try {
-    const scheme = await Schemes.findById(req.params.id)
+    const scheme = await Schemes.findById(req.params.scheme_id)
     if (scheme) {
+      req.scheme = scheme
       next();
     } else {
       next(new ExpressError(`scheme with scheme_id ${req.params.id} not found`, 404))
